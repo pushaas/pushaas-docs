@@ -9,8 +9,23 @@
 
 [PushaaS](https://github.com/pushaas) is a project that aims to offer [server-push](https://en.wikipedia.org/wiki/Push_technology) functionality as a [service](https://docs.tsuru.io/stable/services/index.html) for the [Tsuru](https://tsuru.io/) PaaS, based on tools built around the [Push Stream](https://www.nginx.com/resources/wiki/modules/push_stream/) module for [Nginx](https://www.nginx.com/).
 
-The system that implements the [push service](TODO) can also be deployed manually outside of Tsuru, as a standalone server-push system.
+The system that implements the [Push Service](#push-service) can also be deployed manually outside of Tsuru, as a standalone server-push system.
 
 ## Components
 
 This project documents all the pieces that compose the PushaaS ecosystem. All projects in the ecosystem can be found at https://github.com/pushaas.
+
+- <a name="push-service">Push Service</a> ([`push-service`](https://github.com/pushaas/push-service))
+  - [`push-agent`](https://github.com/pushaas/push-agent)
+  - [`push-api`](https://github.com/pushaas/push-api)
+  - [`push-stream`](https://github.com/pushaas/push-stream)
+  - [`push-redis`](https://github.com/pushaas/push-redis)
+- PushaaS
+  - [`pushaas`](https://github.com/pushaas/pushaas)
+- Libraries
+  - [`push-api-client-javascript`](https://github.com/pushaas/push-api-client-javascript): a JavaScript library that interacts with
+- Demos
+  - [`push-service-demo-app`](https://github.com/pushaas/push-service-demo-app)
+  - [`push-stream-demo-app`](https://github.com/pushaas/push-stream-demo-app)
+- Infrastructure configuration
+  - [`pushaas-aws-config`](https://github.com/pushaas/pushaas-aws-config)
