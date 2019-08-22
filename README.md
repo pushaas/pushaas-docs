@@ -103,6 +103,6 @@ Considerations:
 ## Current State and Limitations
 
 - the PushaaS architecture was designed with horizontal scalability in mind, but currently it is up to it's user to run multiple instances and add a load balancer
-- Tsuru has the concept of [plans](https://docs.tsuru.io/stable/services/api.html#listing-available-plans) (essentially, how big should the the service instance). `pushaas` currently only support a `small` plan
+- Tsuru has the concept of [plans](https://docs.tsuru.io/stable/services/api.html#listing-available-plans) (essentially, how big should be the service instance). `pushaas` currently only support a `small` plan
 - the Server Push architecture was designed with horizontal scalability in mind, but currently there is no automatic way of running multiple instances of its components when creating the instance, neither ways of scaling up and down after creation
 - the only infrastructure provider currently implemented on `pushaas` is Amazon ECS, though it is architected in a way that should be relatively simple to develop and configure different providers
