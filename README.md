@@ -53,15 +53,51 @@ While reading this list of components, check the [Architecture](#architecture) f
 
 - Demo applications
   - [`push-stream-demo-app`](https://github.com/pushaas/push-stream-demo-app): a client-side web application useful to test and demonstrate the features of the Nginx Push Stream module. Can be pointed either to a [`push-stream`](#component-push-stream) instance as well as to any Nginx instance with the module installed.
-  - [`push-service-demo-app`](https://github.com/pushaas/push-service-demo-app): a full-stack web application ready to be run on Tsuru to test and demonstrate the Push Service. Requires an instance of the Push Service to be created and bound via [`pushaas`](#component-pushaas). Or can also be run pointing to any Server Push instance, like the one provided by [`push-service`](https://github.com/pushaas/push-service).
+  - <span name="component-push-service-demo-app">[`push-service-demo-app`](https://github.com/pushaas/push-service-demo-app)</span>: a full-stack web application ready to be run on Tsuru to test and demonstrate the Push Service. Requires an instance of the Push Service to be created and bound via [`pushaas`](#component-pushaas). Or can also be run pointing to any Server Push instance, like the one provided by [`push-service`](https://github.com/pushaas/push-service).
 
 - Infrastructure configuration
-  - [`pushaas-aws-ecs-config`](https://github.com/pushaas/pushaas-aws-ecs-config): contains a demo configuration of a full ecosystem on AWS containing: a [VPC](https://docs.amazonaws.cn/en_us/vpc/latest/userguide/what-is-amazon-vpc.html), a Tsuru cluster running on EC2 machines, an [ECS cluster](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_clusters.html) running a [`pushaas`](#component-pushaas) instance, as well as subnets, security groups, service discovery and other configurations. The `pushaas` instance running on this configuration can be called to provision Push Service instances as [ECS services](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html) on the ECS cluster, and bound to applications running on the Tsuru cluster.
+  - <span name="component-pushaas-aws-ecs-config">[`pushaas-aws-ecs-config`](https://github.com/pushaas/pushaas-aws-ecs-config)</span>: contains a demo configuration of a full ecosystem on AWS containing: a [VPC](https://docs.amazonaws.cn/en_us/vpc/latest/userguide/what-is-amazon-vpc.html), a Tsuru cluster running on EC2 machines, an [ECS cluster](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_clusters.html) running a [`pushaas`](#component-pushaas) instance, as well as subnets, security groups, service discovery and other configurations. The `pushaas` instance running on this configuration can be called to provision Push Service instances as [ECS services](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html) on the ECS cluster, and bound to applications running on the Tsuru cluster.
 
 
 ## Architecture
 
-TODO
+### Push Service
+
+This is what a single Push Service instance looks like:
+
+![push service](https://user-images.githubusercontent.com/4842605/63487084-442a6d80-c480-11e9-8a98-4445e4f25c7a.png)
+
+Considerations:
+- `push-api` is publishing interface for publishers. It supports authentication and extra features on top of what is supported by the publishing route of `push-stream`
+- messages published on the `push-api` are delivered to the `push-redis`, which acts as a middleware
+- the `push-redis` also stores persistent data about channels and stats
+- the `push-agent` listens on `push-redis` for messages and delivers them to the publishing route of `push-stream`
+- there can be more than a single instance of each component if needed
+- is important to keep instances of `push-agent` and `push-stream` paired, in a 1-1 relationship
+- this architecture allows for horizontal scaling of the `push-api`, and, more importantly, of the `push-stream`, where the end-users of the application will connect
+- if multiple instances of `push-api` or `push-stream` are needed, a load balancer should be added in front of them. The PushaaS ecosystem currently does not handle this automatically
+
+### PushaaS
+
+![pushaas](https://user-images.githubusercontent.com/4842605/63487525-fd3d7780-c481-11e9-9c51-c9254b8da2c6.png)
+
+Considerations:
+- Tsuru will call `pushaas` when clients request a new instance of the Push Service (or request a bind, or delete an instance etc)
+- the example above shows Amazon ECS serving two purposes:
+  - the purpose of hosting the `pushaas` application itself and it's Redis database
+  - the purpose of acting as the infrastructure provider for the `pushaas`. So `pushaas`, when asked to create new Push Service instances, will create ECS services and run tasks to provision the new instance.
+- the two usages of Amazon ECS on the previous item are not necessary. `pushaas` can be run on any infrastructure you want to deploy it, and can use other infrastructure providers (though only support for Amazon ECS is currently implemented)
+- `pushaas` requires a Redis to store instances information and to dispatch provisioning jobs
+- if multiple instances of `pushaas` are needed, a load balancer should be added in front of them. The PushaaS ecosystem currently does not handle this automatically
+
+### Full ecosystem
+
+![full ecosystem](https://user-images.githubusercontent.com/4842605/63488178-6b833980-c484-11e9-89f4-1e41d41152af.png)
+
+Considerations:
+- this is the ecosystem provided the [`pushaas-aws-ecs-config`](#component-pushaas-aws-ecs-config) project. More or less
+- the applications running on the Tsuru pool must be created and deployed by the application developer. [`push-service-demo-app`](#component-push-service-demo-app) can be used as an example
+- the example shows 2 (or N) applications and 2 (or N) Push Service instances. This is because is recommended that each Push Service instance is associated only with a single application. Just like you would do with a database
 
 
 ## Current State and Limitations
