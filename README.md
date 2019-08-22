@@ -3,7 +3,7 @@
 </div>
 <div align="center">
 
-# pushaas-docs
+# PushaaS docs
 
 </div>
 
@@ -11,10 +11,33 @@
 
 The system that implements the [Push Service](#push-service) can also be deployed manually outside of Tsuru, as a standalone server-push system.
 
+
+## Concepts
+
+Lets just clarify what we call "Push Service" and "PushaaS".
+
+### Push Service
+
+The **Push Service** is a system (composed of 4 components detailed later) that provides the server-push functionality for client applications. It's components operate on a pub-sub model that allows:
+  - subscribers (usually users consuming some web application) to listen for messages on a channel in order to receive real-time data
+  - publishers (usually applications or users that can produce content for the web application) to publish messages on specified channels, to be delivered to the subscribers
+
+The main component is the Nginx Push Stream module, a battle-tested and very performant module where subscribers and publishers connect to consume and produce messages. Other tools were built around it to expand its functionality, ease publishing and provide stats and authentication for publishers. These tools together compose what we call **Push Service**.
+
+### PushaaS
+
+While an instance of the Push Service is useful on its own and can be manually made available to client applications, it doesn't abstract away from the application developer the provisioning of the infrastructure needed to run a Push Service instance.
+
+The **PushaaS** is a service to provision automatically **Push Service** instances for client applications. Thus, the application developer can easily provision a Push Service instance for each application that needs the server-push functionality. Very much like you would do with a Database-as-a-Service system.
+
+The PushaaS talks to an infrastructure provider and runs the components of a Push Service instance, and make them available for client applications. Most importantly, PushaaS does this as a service for the Tsuru open-source PaaS. So applications running on top of a Tsuru cluster can be bound to a Push Service instance and use it to implement server-push functionality in an easy and scalable fashion.
+
+
 ## Components
 
 This project documents all the pieces that compose the PushaaS ecosystem. All projects in the ecosystem can be found at https://github.com/pushaas.
 
+// TODO
 - <a name="push-service">Push Service</a> ([`push-service`](https://github.com/pushaas/push-service))
   - [`push-agent`](https://github.com/pushaas/push-agent)
   - [`push-api`](https://github.com/pushaas/push-api)
@@ -23,9 +46,20 @@ This project documents all the pieces that compose the PushaaS ecosystem. All pr
 - PushaaS
   - [`pushaas`](https://github.com/pushaas/pushaas)
 - Libraries
-  - [`push-api-client-javascript`](https://github.com/pushaas/push-api-client-javascript): a JavaScript library that interacts with
+  - [`push-api-client-javascript`](https://github.com/pushaas/push-api-client-javascript): a JavaScript library to make calls to an instance of the [`push-api`](#push-api). To be used by client applications
 - Demos
   - [`push-service-demo-app`](https://github.com/pushaas/push-service-demo-app)
   - [`push-stream-demo-app`](https://github.com/pushaas/push-stream-demo-app)
 - Infrastructure configuration
-  - [`pushaas-aws-config`](https://github.com/pushaas/pushaas-aws-config)
+  - [`pushaas-aws-ecs-config`](https://github.com/pushaas/pushaas-aws-ecs-config)
+
+
+## Architecture
+
+TODO
+
+
+## Current State and Limitations
+
+- no scaling commands, though architecture supports it
+- provisioners: ECS
