@@ -37,19 +37,19 @@ The PushaaS talks to an infrastructure provider and runs the components of a Pus
 
 This project documents all the pieces that compose the PushaaS ecosystem. All projects in the ecosystem can be found at https://github.com/pushaas.
 
-// TODO
-- <a name="push-service">Push Service</a> ([`push-service`](https://github.com/pushaas/push-service))
-  - [`push-agent`](https://github.com/pushaas/push-agent)
-  - [`push-api`](https://github.com/pushaas/push-api)
-  - [`push-stream`](https://github.com/pushaas/push-stream)
-  - [`push-redis`](https://github.com/pushaas/push-redis)
+- Push Service: is composed of 4 components that collaborate to implement the service. The components can be deployed by the [`pushaas`](#component-pushaas) being called as a Tsuru service. If you are not using Tsuru, you can still use these 4 components to have an instance of a Push Service. You can deploy them manually, or using containers, or some other tool. [`push-service`](https://github.com/pushaas/push-service) contains a sample setup with Docker Compose that can be used as a reference.
+  - <span name="component-push-stream">[`push-stream`](https://github.com/pushaas/push-stream)</span>
+  - <span name="component-push-api">[`push-api`](https://github.com/pushaas/push-api)</span>
+  - <span name="component-push-redis">[`push-redis`](https://github.com/pushaas/push-redis)</span>
+  - <span name="component-push-agent">[`push-agent`](https://github.com/pushaas/push-agent)</span>
+
 - PushaaS
-  - [`pushaas`](https://github.com/pushaas/pushaas)
+  - <span name="component-pushaas">[`pushaas`](https://github.com/pushaas/pushaas)</span>
 - Libraries
   - [`push-api-client-javascript`](https://github.com/pushaas/push-api-client-javascript): a JavaScript library to make calls to an instance of the [`push-api`](#push-api). To be used by client applications
-- Demos
-  - [`push-service-demo-app`](https://github.com/pushaas/push-service-demo-app)
+- Demo applications
   - [`push-stream-demo-app`](https://github.com/pushaas/push-stream-demo-app)
+  - [`push-service-demo-app`](https://github.com/pushaas/push-service-demo-app)
 - Infrastructure configuration
   - [`pushaas-aws-ecs-config`](https://github.com/pushaas/pushaas-aws-ecs-config)
 
