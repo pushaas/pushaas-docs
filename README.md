@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="200px" src="./pushaas.png">
+  <img width="200px" src="./pushaas-logo.png">
 </div>
 <div align="center">
 
@@ -65,7 +65,7 @@ While reading this list of components, check the [Architecture](#architecture) f
 
 This is what a single Push Service instance looks like:
 
-![push service](https://user-images.githubusercontent.com/4842605/63487084-442a6d80-c480-11e9-8a98-4445e4f25c7a.png)
+![push service](./images/push-service.png)
 
 Considerations:
 - `push-api` is publishing interface for publishers. It supports authentication and extra features on top of what is supported by the publishing route of `push-stream`
@@ -79,7 +79,7 @@ Considerations:
 
 ### PushaaS
 
-![pushaas](https://user-images.githubusercontent.com/4842605/63487525-fd3d7780-c481-11e9-9c51-c9254b8da2c6.png)
+![pushaas](./images/pushaas.png)
 
 Considerations:
 - Tsuru will call `pushaas` when clients request a new instance of the Push Service (or request a bind, or delete an instance etc)
@@ -92,7 +92,7 @@ Considerations:
 
 ### Full ecosystem
 
-![full ecosystem](https://user-images.githubusercontent.com/4842605/63488178-6b833980-c484-11e9-89f4-1e41d41152af.png)
+![full ecosystem](./images/full-ecosystem.png)
 
 Considerations:
 - this is the ecosystem provided the [`pushaas-aws-ecs-config`](#component-pushaas-aws-ecs-config) project. More or less
