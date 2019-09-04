@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="200px" src="./pushaas-logo.png">
+  <img width="200px" src="./images/pushaas-logo.png">
 </div>
 <div align="center">
 
